@@ -1,13 +1,12 @@
 version: "3.9"
 services:
-  db:
+  sqldata:
     image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: mssqlserver
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=MyComplexPassword123
     ports:
-      - "1433:1433"
+     - "1450:1433"
     networks:
       mynet:
   rabbitmq:
@@ -15,7 +14,7 @@ services:
     container_name: rabbitmq
     environment:
       - RABBITMQ_ERLANG_COOKIE=MyErlangCookie
-      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_USER=admindocker-compose down --remove-orphans
       - RABBITMQ_DEFAULT_PASS=admin
     ports:
       - "5672:5672"
@@ -28,7 +27,7 @@ services:
       dockerfile: ./Dockerfile
     container_name: apiserver
     depends_on:
-      - db
+      - sqldata
       - rabbitmq
     ports:
       - "5000:5000"
@@ -36,3 +35,6 @@ services:
       mynet:
 networks:
   mynet:
+
+
+
